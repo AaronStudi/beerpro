@@ -62,6 +62,8 @@
             android:drawableTint="@android:color/darker_gray"
             android:text="In den Kühlschrank"
             android:textColor="@android:color/darker_gray"
+            android:textOff="In den Kühlschrank"
+            android:textOn="Aus dem Kühlschrank"
             android:textSize="10sp" />
 
         <View

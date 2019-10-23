@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "851580039514",
+    "firebase_url": "https://beerpro-studer.firebaseio.com",
+    "project_id": "beerpro-studer",
+    "storage_bucket": "beerpro-studer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851580039514:android:264e9fc5345780a7924363",
+        "android_client_info": {
+          "package_name": "ch.beerpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "851580039514-pobh2a5h8q4i95l69e0dspjl275qr8rt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.beerpro",
+            "certificate_hash": "6edc58636f949c192c3d2230b31896a602276704"
+          }
+        },
+        {
+          "client_id": "851580039514-4moqbe85abc53eni3s3eojvq79e2i2kk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1Zq71635Sg7wxxaSZ2zx0s6aO10C16Tg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "851580039514-4moqbe85abc53eni3s3eojvq79e2i2kk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

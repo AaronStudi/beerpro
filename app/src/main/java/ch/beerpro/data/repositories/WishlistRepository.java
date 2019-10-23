@@ -87,4 +87,21 @@ public class WishlistRepository {
     }
 
 
+    public Task<Void> toggleWishlistItemInMyBeers(String uid, String beerId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        String wishId = Wish.generateId(uid, beerId);
+
+        DocumentReference wishEntryQuery = db.collection(Wish.COLLECTION).document(wishId);
+
+        return wishEntryQuery.get().continueWithTask(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                return wishEntryQuery.delete();
+            } else if (task.isSuccessful()) {
+                return wishEntryQuery.set(new Wish(uid, beerId, new Date()));
+            } else {
+                throw task.getException();
+            }
+        });
+    }
 }

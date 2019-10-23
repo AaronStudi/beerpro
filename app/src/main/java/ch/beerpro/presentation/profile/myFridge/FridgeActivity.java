@@ -1,4 +1,4 @@
-package ch.beerpro.presentation.profile.mywishlist;
+package ch.beerpro.presentation.profile.myFridge;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -20,11 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
-import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.presentation.details.DetailsActivity;
 
-public class WishlistActivity extends AppCompatActivity implements OnWishlistItemInteractionListener {
-
+public class FridgeActivity extends AppCompatActivity implements OnFridgeItemInteractionListener{
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -34,32 +33,32 @@ public class WishlistActivity extends AppCompatActivity implements OnWishlistIte
     @BindView(R.id.emptyView)
     View emptyView;
 
-    private WishlistViewModel model;
-    private WishlistRecyclerViewAdapter adapter;
+    private FridgeViewModel model;
+    private FridgeRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_wishlist);
+        setContentView(R.layout.activity_my_fridgelist);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.title_activity_wishlist));
+        getSupportActionBar().setTitle("Fridge");
 
 
-        model = ViewModelProviders.of(this).get(WishlistViewModel.class);
-        model.getMyWishlistWithBeers().observe(this, this::updateWishlist);
+        model = ViewModelProviders.of(this).get(FridgeViewModel.class);
+        model.getMyFridgelistWithBeers().observe(this, this::updateFridge);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new WishlistRecyclerViewAdapter(this);
+        adapter = new FridgeRecyclerViewAdapter(this);
 
         recyclerView.setAdapter(adapter);
 
     }
 
-    private void updateWishlist(List<Pair<Wish, Beer>> entries) {
+    private void updateFridge(List<Pair<FridgeBeer, Beer>> entries) {
         adapter.submitList(entries);
         if (entries.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
@@ -93,10 +92,5 @@ public class WishlistActivity extends AppCompatActivity implements OnWishlistIte
     @Override
     public void onFridgeClickedListener(Beer beer) {
         model.toggleItemInFridgelistWithDelete(beer.getId());
-    }
-
-    @Override
-    public void onWishClickedListener(Beer beer) {
-        model.toggleItemInWishlist(beer.getId());
     }
 }

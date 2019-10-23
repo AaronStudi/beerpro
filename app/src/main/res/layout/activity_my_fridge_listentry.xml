@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="auf der Wunschliste seit"
+                android:text="im Kühlschrank seit"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,26 +51,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
             <Button
-                android:id="@+id/removeFromWishlist"
+                android:id="@+id/removeFromFridge"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/ic_bookmark_brown_24dp"
-                android:drawableTint="@color/colorPrimary"
-                android:text="Entfernen"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/removeFromWishlist2"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="88dp"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/ic_refrigerator"
                 android:drawableTint="@color/colorPrimary"
@@ -79,8 +63,7 @@
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

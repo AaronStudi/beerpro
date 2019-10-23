@@ -1,6 +1,7 @@
 package ch.beerpro;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -10,14 +11,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * not referenced in this application.
  */
 public class MyApplication extends Application {
+    private static Context appContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        appContext = getApplicationContext();
         /*
          * This will log whenever we reveice data from firestore. This is useful for debugging and to get a feeling
          * of how much and when new data is received from the database.
          * */
         FirebaseFirestore.setLoggingEnabled(true);
+    }
+
+    public static Context getAppContext() {
+        return appContext;
     }
 }

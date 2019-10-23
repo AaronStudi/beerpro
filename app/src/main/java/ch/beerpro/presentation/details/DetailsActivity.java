@@ -4,8 +4,11 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -31,6 +34,7 @@ import butterknife.OnClick;
 import ch.beerpro.GlideApp;
 import ch.beerpro.R;
 import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
 import ch.beerpro.presentation.details.createrating.CreateRatingActivity;
@@ -64,6 +68,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
     @BindView(R.id.wishlist)
     ToggleButton wishlist;
+
+    /*@BindView(R.id.addToFridge)
+    Button addToFridge;*/
 
     @BindView(R.id.manufacturer)
     TextView manufacturer;
@@ -107,6 +114,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         model.getBeer().observe(this, this::updateBeer);
         model.getRatings().observe(this, this::updateRatings);
         model.getWish().observe(this, this::toggleWishlistView);
+        //model.getFridge().observe(this, this::toggleFridgeView);
 
         recyclerView.setAdapter(adapter);
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
@@ -125,7 +133,30 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         View view = getLayoutInflater().inflate(R.layout.single_bottom_sheet_dialog, null);
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(view);
+
+        Button addToFridge = dialog.findViewById(R.id.addToFridge);
+
+
+        addToFridge.setOnClickListener(view1 -> {
+            model.toggleItemInFridgelist(model.getBeer().getValue().getId());
+            /*if(!addToFridge.isChecked()){
+                toggleFridgeView(null, addToFridge);
+            }*/
+        });
+
         dialog.show();
+    }
+
+    private void toggleFridgeView(FridgeBeer fridgeBeer, ToggleButton addToFridge) {
+        if (fridgeBeer != null) {
+            int color = getResources().getColor(R.color.colorPrimary);
+            setDrawableTint(addToFridge, color);
+            addToFridge.setChecked(true);
+        } else {
+            int color = getResources().getColor(android.R.color.darker_gray);
+            setDrawableTint(addToFridge, color);
+            addToFridge.setChecked(false);
+        }
     }
 
     private void updateBeer(Beer item) {

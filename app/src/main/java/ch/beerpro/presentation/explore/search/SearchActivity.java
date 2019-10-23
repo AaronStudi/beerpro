@@ -111,4 +111,9 @@ public class SearchActivity extends AppCompatActivity
     public void onWishClickedListener(Beer item) {
         searchViewModel.toggleItemInWishlist(item.getId());
     }
+
+    @Override
+    public void onFridgeClickedListener(Beer beer) {
+        searchViewModel.toggleItemInFridge(beer.getId());
+    }
 }

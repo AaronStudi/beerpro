@@ -13,7 +13,9 @@ import java.util.Set;
 
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.Entity;
+import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
+import ch.beerpro.domain.models.MyBeerFromFridge;
 import ch.beerpro.domain.models.MyBeerFromRating;
 import ch.beerpro.domain.models.MyBeerFromWishlist;
 import ch.beerpro.domain.models.Rating;
@@ -24,7 +26,7 @@ import static ch.beerpro.domain.utils.LiveDataExtensions.combineLatest;
 
 public class MyBeersRepository {
 
-    private static List<MyBeer> getMyBeers(Triple<List<Wish>, List<Rating>, HashMap<String, Beer>> input) {
+    /*private static List<MyBeer> getMyBeers(Triple<List<Wish>, List<Rating>, HashMap<String, Beer>> input) {
         List<Wish> wishlist = input.getLeft();
         List<Rating> ratings = input.getMiddle();
         HashMap<String, Beer> beers = input.getRight();
@@ -49,13 +51,44 @@ public class MyBeersRepository {
         }
         Collections.sort(result, (r1, r2) -> r2.getDate().compareTo(r1.getDate()));
         return result;
+    }*/
+
+    private static List<MyBeer> getMyBeers(Triple<List<Wish>, List<FridgeBeer>, HashMap<String, Beer>> input) {
+        List<Wish> wishlist = input.getLeft();
+        List<FridgeBeer> fridgeBeers = input.getMiddle();
+        HashMap<String, Beer> beers = input.getRight();
+
+        ArrayList<MyBeer> result = new ArrayList<>();
+        Set<String> beersAlreadyOnTheList = new HashSet<>();
+        for (Wish wish : wishlist) {
+            String beerId = wish.getBeerId();
+            result.add(new MyBeerFromWishlist(wish, beers.get(beerId)));
+            beersAlreadyOnTheList.add(beerId);
+        }
+
+        for (FridgeBeer fridgeBeer : fridgeBeers) {
+            String beerId = fridgeBeer.getBeerId();
+            if (beersAlreadyOnTheList.contains(beerId)) {
+                // if the beer is already on the wish list, don't add it again
+            } else {
+                result.add(new MyBeerFromFridge(fridgeBeer, beers.get(beerId)));
+                // we also don't want to see a fridged beer twice
+                beersAlreadyOnTheList.add(beerId);
+            }
+        }
+        Collections.sort(result, (r1, r2) -> r2.getDate().compareTo(r1.getDate()));
+        return result;
     }
 
-
     public LiveData<List<MyBeer>> getMyBeers(LiveData<List<Beer>> allBeers, LiveData<List<Wish>> myWishlist,
-                                             LiveData<List<Rating>> myRatings) {
-        return map(combineLatest(myWishlist, myRatings, map(allBeers, Entity::entitiesById)),
+                                             LiveData<List<FridgeBeer>> myFridge) {
+        return map(combineLatest(myWishlist, myFridge, map(allBeers, Entity::entitiesById)),
                 MyBeersRepository::getMyBeers);
     }
 
+    /*public LiveData<List<MyBeer>> getMyBeers(LiveData<List<Beer>> allBeers, LiveData<List<Wish>> myWishlist,
+                                             LiveData<List<Rating>> myRatings, LiveData<List<FridgeBeer>> myFridgeBeers) {
+        return map(combineLatest(myWishlist, myRatings, map(allBeers, Entity::entitiesById)),
+                MyBeersRepository::getMyBeers);
+    }*/
 }

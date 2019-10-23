@@ -3,6 +3,7 @@ package ch.beerpro.presentation.profile.mybeers;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -84,7 +85,13 @@ public class MyBeersActivity extends AppCompatActivity implements OnMyBeerItemIn
     }
 
     @Override
+    public void onFridgeClickedListener(Beer beer) {
+        Log.d("Aaron", "Fridge Clicked");
+        model.toggleFridgelistItemInMyBeers(beer.getId());
+    }
+
+    @Override
     public void onWishClickedListener(Beer item) {
-        model.toggleItemInWishlist(item.getId());
+        model.toggleWishlistItemInMyBeers(item.getId());
     }
 }
