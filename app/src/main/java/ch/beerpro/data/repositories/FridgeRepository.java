@@ -7,9 +7,13 @@ import android.widget.Toast;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import ch.beerpro.MyApplication;
 import ch.beerpro.domain.models.Beer;
@@ -38,6 +43,7 @@ public class FridgeRepository {
                 .orderBy(FridgeBeer.FIELD_ADDED_AT, Query.Direction.DESCENDING).whereEqualTo(FridgeBeer.FIELD_USER_ID, userId),
                 FridgeBeer.class);
     }
+
     private static LiveData<FridgeBeer> getUserFridgeListFor(Pair<String, Beer> input) {
         String userId = input.first;
         Beer beer = input.second;
@@ -74,7 +80,7 @@ public class FridgeRepository {
                 Toast toast = Toast.makeText(context, "zum Kühlschrank hinzugefügt", Toast.LENGTH_SHORT);
                 toast.show();
                 Log.d("AARON", "Zum Kühlschrank hinzugefügt");
-                return FridgeBeerEntryQuery.set(new FridgeBeer(userId, itemId, new Date()));
+                return FridgeBeerEntryQuery.set(new FridgeBeer(userId, itemId, new Date(), 1));
             } else {
                 Log.d("AARON", "TaskException in FridgeRepository");
                 throw task.getException();
@@ -102,7 +108,7 @@ public class FridgeRepository {
             if (task.isSuccessful() && task.getResult().exists()) {
                 //bier ist bereits im kuehlschrank
                 Context context = MyApplication.getAppContext();
-                Toast toast = Toast.makeText(context, "ist bereit im Kühlschrank", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(context, "ist bereits im Kühlschrank", Toast.LENGTH_SHORT);
                 toast.show();
                 return null;
             } else if (task.isSuccessful()) {
@@ -110,22 +116,110 @@ public class FridgeRepository {
                 Context context = MyApplication.getAppContext();
                 Toast toast = Toast.makeText(context, "zum Kühlschrank hinzugefügt", Toast.LENGTH_SHORT);
                 toast.show();
-                return FridgeBeerEntryQuery.set(new FridgeBeer(userId, itemId, new Date()));
+                return FridgeBeerEntryQuery.set(new FridgeBeer(userId, itemId, new Date(), 1));
             } else {
                 throw task.getException();
             }
         });
     }
 
-    public Task<Void> toggleUserFridgelistItemWithDelete(String userId, String itemId) {
-
+    /*public boolean beerIsInFridge(String userId, String itemId){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         String FridgeBeerId = FridgeBeer.generateId(userId, itemId);
 
         DocumentReference FridgeBeerEntryQuery = db.collection(FridgeBeer.COLLECTION).document(FridgeBeerId);
 
-        return FridgeBeerEntryQuery.get().continueWithTask(task -> {
+        Task<Void> a = FridgeBeerEntryQuery.get().continueWithTask(task -> {
+            /*if (task.isSuccessful() && task.getResult().exists()) {
+
+            } else if (task.isSuccessful()) {
+                return FridgeBeerEntryQuery.set(new FridgeBeer(userId, itemId, new Date()));
+            } else {
+                throw task.getException();
+            }*//*
+            if (task.isSuccessful() && task.getResult().exists()) {
+                //bier ist bereits im kuehlschrank
+                return new Task<Void>() {
+                    @Override
+                    public boolean isComplete() {
+                        return false;
+                    }
+                    @Override
+                    public boolean isSuccessful() {
+                        return false;
+                    }
+                    @Override
+                    public boolean isCanceled() {
+                        return false;
+                    }
+                    @Nullable
+                    @Override
+                    public Void getResult() {
+                        return null;
+                    }
+                    @Nullable
+                    @Override
+                    public <X extends Throwable> Void getResult(@NonNull Class<X> aClass) throws X {
+                        return null;
+                    }
+                    @Nullable
+                    @Override
+                    public Exception getException() {
+                        return null;
+                    }
+                    @NonNull
+                    @Override
+                    public Task<Void> addOnSuccessListener(@NonNull OnSuccessListener<? super Void> onSuccessListener) {
+                        return null;
+                    }
+                    @NonNull
+                    @Override
+                    public Task<Void> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+                        return null;
+                    }
+                    @NonNull
+                    @Override
+                    public Task<Void> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+                        return null;
+                    }
+                    @NonNull
+                    @Override
+                    public Task<Void> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+                        return null;
+                    }
+                    @NonNull
+                    @Override
+                    public Task<Void> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+                        return null;
+                    }
+                    @NonNull
+                    @Override
+                    public Task<Void> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
+                        return null;
+                    }
+                };
+            } else if (task.isSuccessful()) {
+                //bier noch nicht im Kühlschrank
+                return null;
+            } else {
+                throw task.getException();
+            }
+        });
+
+        return a == null ? true:false;
+    }*/
+
+
+
+    public boolean toggleUserFridgelistItemWithDelete(String userId, String itemId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        String FridgeBeerId = FridgeBeer.generateId(userId, itemId);
+
+        DocumentReference FridgeBeerEntryQuery = db.collection(FridgeBeer.COLLECTION).document(FridgeBeerId);
+
+        Task<Void> a = FridgeBeerEntryQuery.get().continueWithTask(task -> {
             /*if (task.isSuccessful() && task.getResult().exists()) {
 
             } else if (task.isSuccessful()) {
@@ -135,17 +229,19 @@ public class FridgeRepository {
             }*/
             if (task.isSuccessful() && task.getResult().exists()) {
                 //bier ist bereits im kuehlschrank
+                Log.d("AARON", "Is deleted From FRIDGE");
                 return FridgeBeerEntryQuery.delete();
             } else if (task.isSuccessful()) {
                 //bier zum kuehlschrank hinzufügen
                 /*Context context = MyApplication.getAppContext();
                 Toast toast = Toast.makeText(context, "zum Kühlschrank hinzugefügt", Toast.LENGTH_SHORT);
                 toast.show();*/
-                return FridgeBeerEntryQuery.set(new FridgeBeer(userId, itemId, new Date()));
+                return FridgeBeerEntryQuery.set(new FridgeBeer(userId, itemId, new Date(), 1));
             } else {
                 throw task.getException();
             }
         });
+        return false;
     }
 
     public LiveData<List<Pair<FridgeBeer, Beer>>> getMyFridgeWithBeers(LiveData<String> currentUserId,

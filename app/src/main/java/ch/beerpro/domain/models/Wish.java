@@ -8,7 +8,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 import java.util.Date;
 
 @IgnoreExtraProperties
-public class Wish implements Entity {
+public class Wish extends WhateverBeer implements Entity {
 
     public static final String COLLECTION = "wishes";
     public static final String FIELD_ID = "id";

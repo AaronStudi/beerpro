@@ -3,6 +3,7 @@ package ch.beerpro.presentation.profile.mywishlist;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,7 +57,6 @@ public class WishlistActivity extends AppCompatActivity implements OnWishlistIte
         adapter = new WishlistRecyclerViewAdapter(this);
 
         recyclerView.setAdapter(adapter);
-
     }
 
     private void updateWishlist(List<Pair<Wish, Beer>> entries) {
@@ -92,7 +92,8 @@ public class WishlistActivity extends AppCompatActivity implements OnWishlistIte
 
     @Override
     public void onFridgeClickedListener(Beer beer) {
-        model.toggleItemInFridgelistWithDelete(beer.getId());
+        //Log.d("AARON", "ADD TO FRIDGE - WishlistActivity");
+        model.toggleItemInFridgelist(beer.getId());
     }
 
     @Override

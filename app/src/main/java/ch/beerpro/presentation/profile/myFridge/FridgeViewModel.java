@@ -38,8 +38,7 @@ public class FridgeViewModel extends ViewModel implements CurrentUser {
         return fridgeRepository.toggleUserFridgelistItem(getCurrentUser().getUid(), itemId);
     }*/
 
-    public Task<Void> toggleItemInFridgelistWithDelete(String itemId) {
+    public boolean toggleItemInFridgelistWithDelete(String itemId) {
         return fridgeRepository.toggleUserFridgelistItemWithDelete(getCurrentUser().getUid(), itemId);
     }
-
 }

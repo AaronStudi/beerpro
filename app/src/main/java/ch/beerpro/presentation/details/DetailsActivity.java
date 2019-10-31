@@ -84,6 +84,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.shareButton)
+    Button shareButton;
+
     private RatingsRecyclerViewAdapter adapter;
 
     private DetailsViewModel model;
@@ -136,7 +139,6 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         Button addToFridge = dialog.findViewById(R.id.addToFridge);
 
-
         addToFridge.setOnClickListener(view1 -> {
             model.toggleItemInFridgelist(model.getBeer().getValue().getId());
             /*if(!addToFridge.isChecked()){
@@ -180,6 +182,15 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @Override
     public void onRatingLikedListener(Rating rating) {
         model.toggleLike(rating);
+    }
+
+    @OnClick(R.id.shareButton)
+    public void onShareButtonClickedListener(View view){
+        Intent myIntent = new Intent(Intent.ACTION_SEND);
+        myIntent.setType("text/plain");
+        String text = "Check out this awesome beer: " + name.getText().toString();
+        myIntent.putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(Intent.createChooser(myIntent, "Share with"));
     }
 
     @OnClick(R.id.wishlist)

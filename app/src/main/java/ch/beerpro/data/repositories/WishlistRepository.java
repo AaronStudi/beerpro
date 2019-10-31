@@ -1,5 +1,6 @@
 package ch.beerpro.data.repositories;
 
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.lifecycle.LiveData;
@@ -42,7 +43,6 @@ public class WishlistRepository {
     }
 
     public Task<Void> toggleUserWishlistItem(String userId, String itemId) {
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         String wishId = Wish.generateId(userId, itemId);
@@ -51,6 +51,7 @@ public class WishlistRepository {
 
         return wishEntryQuery.get().continueWithTask(task -> {
             if (task.isSuccessful() && task.getResult().exists()) {
+                Log.d("AARON", "Is deleted From WISHLIST");
                 return wishEntryQuery.delete();
             } else if (task.isSuccessful()) {
                 return wishEntryQuery.set(new Wish(userId, itemId, new Date()));

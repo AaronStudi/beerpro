@@ -1,5 +1,6 @@
 package ch.beerpro.presentation.profile.myFridge;
 
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,12 +79,23 @@ public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer
         @BindView(R.id.removeFromFridge)
         Button remove;
 
+        @BindView(R.id.counter)
+        TextView amount;
+
+        @BindView(R.id.minus_beer)
+        TextView minus_beer;
+
+        @BindView(R.id.plus_beer)
+        TextView plus_beer;
+
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, itemView);
         }
 
         void bind(FridgeBeer fridgeBeer, Beer item, OnFridgeItemInteractionListener listener) {
+            Log.d("AARON", String.valueOf(fridgeBeer.getAmount()));
+            amount.setText("Anzahl: " + String.valueOf(fridgeBeer.getAmount()));
             name.setText(item.getName());
             manufacturer.setText(item.getManufacturer());
             category.setText(item.getCategory());
@@ -99,6 +111,19 @@ public class FridgeRecyclerViewAdapter extends ListAdapter<Pair<FridgeBeer, Beer
                     DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(fridgeBeer.getAddedAt());
             addedAt.setText(formattedDate);
             remove.setOnClickListener(v -> listener.onFridgeClickedListener(item));
+
+            plus_beer.setOnClickListener(v -> {
+                Integer amount_of_beers = listener.onPlusClickedListener(item, fridgeBeer.getAmount());
+                fridgeBeer.setAmount(amount_of_beers);
+                amount.setText("Anzahl: " + String.valueOf(fridgeBeer.getAmount()));
+            });
+
+            minus_beer.setOnClickListener(v -> {
+                Integer amount_of_beers = listener.onMinusClickedListener(item, fridgeBeer.getAmount());
+                fridgeBeer.setAmount(amount_of_beers);
+                amount.setText("Anzahl: " + String.valueOf(fridgeBeer.getAmount()));
+            });
+
         }
 
     }

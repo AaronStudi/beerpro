@@ -6,9 +6,8 @@ import com.google.firebase.firestore.Exclude;
 
 import java.util.Date;
 
-public class FridgeBeer extends WhateverBeer implements Entity{
-
-    public static final String COLLECTION = "FridgeBeers";
+public class WhateverBeer implements Entity{
+    public static final String COLLECTION = "WhateverBeers";
     public static final String FIELD_ID = "id";
     public static final String FIELD_USER_ID = "userId";
     public static final String FIELD_BEER_ID = "beerId";
@@ -22,16 +21,14 @@ public class FridgeBeer extends WhateverBeer implements Entity{
     private String userId;
     private String beerId;
     private Date addedAt;
-    private int amount;
 
-    public FridgeBeer(String userId, String beerId, Date addedAt, int amount) {
+    public WhateverBeer(String userId, String beerId, Date addedAt) {
         this.userId = userId;
         this.beerId = beerId;
         this.addedAt = addedAt;
-        this.amount = amount;
     }
 
-    public FridgeBeer() {
+    public WhateverBeer() {
     }
 
     public static String generateId(String userId, String beerId) {
@@ -54,8 +51,6 @@ public class FridgeBeer extends WhateverBeer implements Entity{
         return this.addedAt;
     }
 
-    public int getAmount(){ return this.amount; }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -72,12 +67,10 @@ public class FridgeBeer extends WhateverBeer implements Entity{
         this.addedAt = addedAt;
     }
 
-    public void setAmount(int amount){ this.amount = amount; }
-
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof FridgeBeer)) return false;
-        final FridgeBeer other = (FridgeBeer) o;
+        if (!(o instanceof WhateverBeer)) return false;
+        final WhateverBeer other = (WhateverBeer) o;
         if (!other.canEqual((Object) this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
@@ -96,7 +89,7 @@ public class FridgeBeer extends WhateverBeer implements Entity{
     }
 
     private boolean canEqual(final Object other) {
-        return other instanceof FridgeBeer;
+        return other instanceof WhateverBeer;
     }
 
     public int hashCode() {
@@ -115,7 +108,6 @@ public class FridgeBeer extends WhateverBeer implements Entity{
 
     @NonNull
     public String toString() {
-        return "FridgeBeer(id=" + this.getId() + ", amount=" + this.amount + ", userId=" + this.getUserId() + ", beerId=" + this.getBeerId() + ", addedAt=" + this.getAddedAt() + ")";
+        return "WhateverBeer(id=" + this.getId() + ", userId=" + this.getUserId() + ", beerId=" + this.getBeerId() + ", addedAt=" + this.getAddedAt() + ")";
     }
 }
-

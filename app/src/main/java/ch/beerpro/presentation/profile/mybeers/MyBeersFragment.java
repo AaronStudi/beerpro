@@ -62,6 +62,7 @@ public class MyBeersFragment extends Fragment {
         }
         else {
             adapter.submitList(new ArrayList<>(beers));
+            adapter.notifyDataSetChanged();
             emptyView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
         }

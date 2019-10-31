@@ -1,5 +1,6 @@
 package ch.beerpro.presentation.profile.mywishlist;
 
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,14 +21,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.text.DateFormat;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ch.beerpro.GlideApp;
 import ch.beerpro.R;
+import ch.beerpro.data.repositories.FridgeRepository;
 import ch.beerpro.domain.models.Beer;
+import ch.beerpro.domain.models.FridgeBeer;
+import ch.beerpro.domain.models.MyBeerFromWhatever;
+import ch.beerpro.domain.models.WhateverBeer;
 import ch.beerpro.domain.models.Wish;
+import ch.beerpro.presentation.utils.DrawableHelpers;
 import ch.beerpro.presentation.utils.EntityPairDiffItemCallback;
+
+import static ch.beerpro.presentation.utils.DrawableHelpers.setDrawableTint;
 
 public class WishlistRecyclerViewAdapter extends ListAdapter<Pair<Wish, Beer>, WishlistRecyclerViewAdapter.ViewHolder> {
 
@@ -79,6 +91,9 @@ public class WishlistRecyclerViewAdapter extends ListAdapter<Pair<Wish, Beer>, W
         @BindView(R.id.removeFromWishlist)
         Button remove;
 
+        @BindView(R.id.removeFromFridge2)
+        Button removeFromFridge;
+
         ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, itemView);
@@ -100,6 +115,29 @@ public class WishlistRecyclerViewAdapter extends ListAdapter<Pair<Wish, Beer>, W
                     DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(wish.getAddedAt());
             addedAt.setText(formattedDate);
             remove.setOnClickListener(v -> listener.onWishClickedListener(item));
+            removeFromFridge.setOnClickListener(v -> {
+                listener.onFridgeClickedListener(item);
+                //toggleButtonView(null, removeFromFridge);
+
+            });
+
+            /*String id = wish.getBeerId();
+            if()
+            if(((MyBeerFromWhatever)entry).isInFridge()){
+                DrawableHelpers
+                        .setDrawableTint(removeFromFridge, itemView.getResources().getColor(R.color.colorPrimary));
+                //onTheListSince.setText("im Kühlschrank seit");
+            }
+            else{
+                DrawableHelpers
+                        .setDrawableTint(removeFromFridge, itemView.getResources().getColor(android.R.color.darker_gray));
+            }*/
+        }
+
+        private void toggleButtonView(WhateverBeer beer, Button button) {
+            DrawableHelpers
+                    .setDrawableTint(button, itemView.getResources().getColor(R.color.colorPrimary));
+            button.setText("Entfernen");
         }
 
     }

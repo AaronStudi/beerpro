@@ -20,6 +20,7 @@ import ch.beerpro.data.repositories.WishlistRepository;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
+import ch.beerpro.domain.models.MyBeerFromWhatever;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
 
@@ -36,6 +37,7 @@ public class MainViewModel extends ViewModel implements CurrentUser {
     private final WishlistRepository wishlistRepository;
     private final FridgeRepository fridgeRepository;
 
+    private final LiveData<List<MyBeer>> myWishlistTest;
     private final LiveData<List<Wish>> myWishlist;
     private final LiveData<List<FridgeBeer>> myFridge;
     private final LiveData<List<Rating>> myRatings;
@@ -60,6 +62,7 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         myRatings = ratingsRepository.getMyRatings(currentUserId);
         //myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings);
         myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myFridge);
+        myWishlistTest = myBeersRepository.getMyBeers(allBeers, myWishlist, myFridge);
 
         /*
          * Set the current user id, which is used as input for the getMyWishlist and getMyRatings calls above.

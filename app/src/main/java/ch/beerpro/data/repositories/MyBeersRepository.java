@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.beerpro.domain.models.Beer;
@@ -17,8 +18,11 @@ import ch.beerpro.domain.models.FridgeBeer;
 import ch.beerpro.domain.models.MyBeer;
 import ch.beerpro.domain.models.MyBeerFromFridge;
 import ch.beerpro.domain.models.MyBeerFromRating;
+//import ch.beerpro.domain.models.MyBeerFromWhatever;
+import ch.beerpro.domain.models.MyBeerFromWhatever;
 import ch.beerpro.domain.models.MyBeerFromWishlist;
 import ch.beerpro.domain.models.Rating;
+import ch.beerpro.domain.models.WhateverBeer;
 import ch.beerpro.domain.models.Wish;
 
 import static androidx.lifecycle.Transformations.map;
@@ -59,21 +63,25 @@ public class MyBeersRepository {
         HashMap<String, Beer> beers = input.getRight();
 
         ArrayList<MyBeer> result = new ArrayList<>();
-        Set<String> beersAlreadyOnTheList = new HashSet<>();
-        for (Wish wish : wishlist) {
+        Map<String, MyBeer> beersAlreadyOnTheList = new HashMap<>();
+        for (WhateverBeer wish : wishlist) {
             String beerId = wish.getBeerId();
-            result.add(new MyBeerFromWishlist(wish, beers.get(beerId)));
-            beersAlreadyOnTheList.add(beerId);
+            MyBeerFromWhatever x = new MyBeerFromWhatever(wish, false, true, beers.get(beerId));
+            result.add(x);
+            beersAlreadyOnTheList.put(beerId, x);
         }
 
-        for (FridgeBeer fridgeBeer : fridgeBeers) {
+        for (WhateverBeer fridgeBeer : fridgeBeers) {
             String beerId = fridgeBeer.getBeerId();
-            if (beersAlreadyOnTheList.contains(beerId)) {
+            if (beersAlreadyOnTheList.containsKey(beerId)) {
                 // if the beer is already on the wish list, don't add it again
+                result.remove(beersAlreadyOnTheList.get(beerId));
+                result.add(new MyBeerFromWhatever(fridgeBeer, true, true, beers.get(beerId)));
             } else {
-                result.add(new MyBeerFromFridge(fridgeBeer, beers.get(beerId)));
+                MyBeerFromWhatever x = new MyBeerFromWhatever(fridgeBeer, true, false, beers.get(beerId));
+                result.add(x);
                 // we also don't want to see a fridged beer twice
-                beersAlreadyOnTheList.add(beerId);
+                beersAlreadyOnTheList.put(beerId, x);
             }
         }
         Collections.sort(result, (r1, r2) -> r2.getDate().compareTo(r1.getDate()));
